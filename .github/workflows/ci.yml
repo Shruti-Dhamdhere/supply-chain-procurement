@@ -1,0 +1,46 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install torch==2.2.0 --index-url https://download.pytorch.org/whl/cpu
+          pip install pandas numpy scikit-learn scipy networkx
+          pip install fastapi uvicorn pydantic httpx
+          pip install loguru pyyaml python-dotenv
+          pip install pytest pytest-cov
+
+      - name: Check Python syntax
+        run: |
+          python -m py_compile src/data/loader.py
+          python -m py_compile src/api/schemas.py
+          echo "Syntax OK"
+
+      - name: Run tests
+        run: pytest tests/ -v --cov=src
+        env:
+          USE_MOCK: "true"
+          ANTHROPIC_API_KEY: "mock_key"
