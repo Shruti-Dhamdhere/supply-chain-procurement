@@ -26,15 +26,6 @@ Nothing good exists for mid-market companies running on Excel and internal ERP t
 
 ## Solution
 
-ProcureIQ combines two novel layers:
-
-**GNN Layer** — A heterogeneous supplier knowledge graph where nodes are suppliers,
-components, countries, contracts, and routes. GraphSAGE + GAT learn embeddings
-that capture supply network relationships, risk propagation, and price anomalies.
-
-**Agent Layer** — A multi-agent system built on LangGraph + Claude that uses GNN
-embeddings as its knowledge base to reason, draft documents, and recommend actions.
-
 ---
 
 ## Novel Contributions
